@@ -29,5 +29,5 @@ setup(
     ],
     author="Learning Equality",
     author_email="info@learningequality.org",
-    python_requires=">=3.6,  <3.14",
+    python_requires=">=3.6, <3.15",
 )
