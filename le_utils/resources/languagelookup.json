@@ -759,6 +759,10 @@
     "name": "Pashto; Pushto",
     "native_name": "پښتو"
   },
+  "prs": {
+    "name": "Dari",
+    "native_name": "دری"
+  },
   "pt": {
     "name": "Portuguese",
     "native_name": "Português"
