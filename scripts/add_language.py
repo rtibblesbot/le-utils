@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import json
 import os
 import sys
@@ -77,7 +78,53 @@ def get_language_info(query: str) -> Optional[Dict[str, str]]:
     return data
 
 
+def add_language(data, query, confirm=False):
+    """Look up a language and add it to the data dict.
+
+    Args:
+        data: language dictionary to update
+        query: language name or code to look up
+        confirm: if True, prompt the user before adding
+
+    Returns True if the language was added, False otherwise.
+    """
+    language_info = get_language_info(query)
+    if not language_info:
+        print(f"Language not found: {query}")
+        return False
+
+    code = language_info["code"]
+    name = language_info["name"]
+    native_name = language_info["native_name"]
+
+    print(f"\nFound language: {code} - {name} ({native_name})")
+
+    if code in data:
+        print(
+            f"Warning: '{code}' already exists: "
+            f"{data[code].get('name')} ({data[code].get('native_name')})"
+        )
+
+    if confirm and input("Add this language? (Y/N): ").lower() != "y":
+        print("Language not added.")
+        return False
+
+    data[code] = {"name": name, "native_name": native_name}
+    print(f"Added language: {name}")
+    return True
+
+
 def main():
+    parser = argparse.ArgumentParser(
+        description="Add languages to le_utils languagelookup.json"
+    )
+    parser.add_argument(
+        "languages",
+        nargs="*",
+        help="Language names or codes to add (non-interactive mode)",
+    )
+    args = parser.parse_args()
+
     # Get file path
     file_path = os.path.join(
         os.path.dirname(__file__), "../le_utils/resources/languagelookup.json"
@@ -91,45 +138,30 @@ def main():
     else:
         print(f"Loaded {len(data)} language entries.")
 
-    while True:
-        query = input(
-            "\nEnter language name or code to add (or press Enter to finish): "
-        )
-        if not query:
-            break
-
-        language_info = get_language_info(query)
-        if language_info:
-            code = language_info["code"]
-            name = language_info["name"]
-            native_name = language_info["native_name"]
-
-            print("\nFound language information:")
-            print(f"Code: {code}")
-            print(f"Name: {name}")
-            print(f"Native name: {native_name}")
-
-            if code in data:
-                print(
-                    f"Warning: Language code '{code}' already exists in the data with the following information:"
-                )
-                print(f"Name: {data[code].get('name')}")
-                print(f"Native name: {data[code].get('native_name')}")
-
-            confirm = input("Add this language? (Y/N): ")
-            if confirm.lower() == "y":
-                data[code] = {"name": name, "native_name": native_name}
-                print(f"Added language: {name}")
-            else:
-                print("Language not added.")
-        else:
-            print("Language not found. Please try a different query.")
-
-    # Save the updated data
-    if input("\nSave changes to the JSON file? (Y/N): ").lower() == "y":
-        save_json_file(data, file_path)
+    added = 0
+    if args.languages:
+        # Non-interactive: add all specified languages and save
+        for query in args.languages:
+            if add_language(data, query):
+                added += 1
     else:
-        print("Changes not saved.")
+        while True:
+            query = input(
+                "\nEnter language name or code to add (or press Enter to finish): "
+            )
+            if not query:
+                break
+            if add_language(data, query, confirm=True):
+                added += 1
+
+        if input("\nSave changes to the JSON file? (Y/N): ").lower() != "y":
+            return
+
+    if added:
+        save_json_file(data, file_path)
+        print(f"\nAdded {added} language(s).")
+    else:
+        print("\nNo languages were added.")
 
 
 if __name__ == "__main__":
