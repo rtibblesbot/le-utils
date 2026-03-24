@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import logging
 import os
 import sys
 from typing import Any
@@ -53,6 +54,9 @@ def _get_pycountry_language(code):
     return data
 
 
+RTL_SCRIPTS = {"Arab", "Hebr", "Thaa", "Syrc", "Mand", "Samr", "Nkoo"}
+
+
 def get_language_info(query: str) -> Optional[Dict[str, str]]:
     """Get language information using langcodes and pycountry."""
     # Try to parse as a language code first
@@ -74,6 +78,14 @@ def get_language_info(query: str) -> Optional[Dict[str, str]]:
 
     if data["native_name"] == data["name"]:
         data.update(_get_pycountry_language(data["code"]))
+
+    # Detect RTL from script
+    try:
+        script = lang.maximize().script
+        if script in RTL_SCRIPTS:
+            data["rtl"] = True
+    except Exception:
+        logging.warning("Could not detect script direction for %s", query)
 
     return data
 
@@ -109,7 +121,10 @@ def add_language(data, query, confirm=False):
         print("Language not added.")
         return False
 
-    data[code] = {"name": name, "native_name": native_name}
+    entry = {"name": name, "native_name": native_name}
+    if language_info.get("rtl"):
+        entry["rtl"] = True
+    data[code] = entry
     print(f"Added language: {name}")
     return True
 

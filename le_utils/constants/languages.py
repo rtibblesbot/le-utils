@@ -15,20 +15,11 @@ LANGUAGE_DIRECTIONS = (
     (RTL_LANGUAGE, "Right to Left"),
 )
 
-RTL_LANG_CODES = [
-    "ar",  # Arabic
-    "arq",  # Algerian
-    "dv",  # Divehi; Dhivehi; Maldivian
-    "he",  # Hebrew (modern)
-    "fa",  # Persian
-    "ps",  # Pashto; Pushto
-    "ur",  # Urdu
-    "yi",  # Yiddish
-]
-
 
 class Language(
-    namedtuple("Language", ["native_name", "primary_code", "subcode", "name"])
+    namedtuple(
+        "Language", ["native_name", "primary_code", "subcode", "name", "text_direction"]
+    )
 ):
     @property
     def code(self):
@@ -56,6 +47,9 @@ def generate_list(constantlist):
         parts = code.split("-", maxsplit=1)
         lang["primary_code"] = parts[0]
         lang["subcode"] = None if len(parts) == 1 else parts[1]
+        lang["text_direction"] = (
+            RTL_LANGUAGE if lang.pop("rtl", False) else LTR_LANGUAGE
+        )
 
         yield Language(**lang)
 
@@ -200,7 +194,7 @@ def getlang_by_native_name(native_name):
 
 
 def getlang_direction(code):
-    if code in RTL_LANG_CODES:
-        return RTL_LANGUAGE
-    else:
-        return LTR_LANGUAGE
+    lang = getlang(code)
+    if lang is not None:
+        return lang.text_direction
+    return LTR_LANGUAGE

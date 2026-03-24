@@ -211,11 +211,36 @@ def test_african_languages(african_languages_list):
     )
 
 
-# check RTL_LANG_CODES contains Arabic, Hebrew, and Urdu
-################################################################################
-def test_rtl_languagess():
-    minimum_list = ["ar", "he", "ur"]
-    for lang_code in minimum_list:
-        assert (
-            lang_code in languages.RTL_LANG_CODES
-        ), "Known RTL missing from RTL_LANG_CODES list"
+def test_language_text_direction():
+    """Language objects should expose a text_direction field derived from JSON."""
+    # RTL languages
+    for code in [
+        "ar",
+        "arq",
+        "dv",
+        "he",
+        "fa",
+        "ps",
+        "ur",
+        "yi",
+        "prs",
+        "bcc",
+        "brh",
+        "ks",
+        "pbu",
+        "pnb",
+        "sd",
+        "ug",
+        "ur-PK",
+    ]:
+        lang = languages.getlang(code)
+        assert lang is not None, f"{code} should exist"
+        assert lang.text_direction == languages.RTL_LANGUAGE, f"{code} should be RTL"
+        assert languages.getlang_direction(code) == languages.RTL_LANGUAGE
+
+    # LTR languages
+    for code in ["en", "fr", "es"]:
+        lang = languages.getlang(code)
+        assert lang is not None, f"{code} should exist"
+        assert lang.text_direction == languages.LTR_LANGUAGE, f"{code} should be LTR"
+        assert languages.getlang_direction(code) == languages.LTR_LANGUAGE
