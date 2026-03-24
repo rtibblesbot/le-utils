@@ -37,11 +37,13 @@
   },
   "ar": {
     "name": "Arabic",
-    "native_name": "العربية"
+    "native_name": "العربية",
+    "rtl": true
   },
   "arq": {
     "name": "Algerian; Darja",
-    "native_name": "دزيرية"
+    "native_name": "دزيرية",
+    "rtl": true
   },
   "as": {
     "name": "Assamese",
@@ -69,7 +71,8 @@
   },
   "bcc": {
     "name": "Southern Balochi",
-    "native_name": "Southern Balochi"
+    "native_name": "Southern Balochi",
+    "rtl": true
   },
   "be": {
     "name": "Belarusian",
@@ -121,7 +124,8 @@
   },
   "brh": {
     "name": "Brahui",
-    "native_name": "Brahui"
+    "native_name": "Brahui",
+    "rtl": true
   },
   "bs": {
     "name": "Bosnian",
@@ -197,7 +201,8 @@
   },
   "dv": {
     "name": "Divehi; Dhivehi; Maldivian",
-    "native_name": "ދިވެހި"
+    "native_name": "ދިވެހި",
+    "rtl": true
   },
   "ee": {
     "name": "Ewe",
@@ -261,7 +266,8 @@
   },
   "fa": {
     "name": "Persian",
-    "native_name": "فارسی"
+    "native_name": "فارسی",
+    "rtl": true
   },
   "ff": {
     "name": "Fula; Fulah; Pulaar; Pular",
@@ -349,7 +355,8 @@
   },
   "he": {
     "name": "Hebrew (modern)",
-    "native_name": "עברית"
+    "native_name": "עברית",
+    "rtl": true
   },
   "hi": {
     "name": "Hindi",
@@ -493,7 +500,8 @@
   },
   "ks": {
     "name": "Kashmiri",
-    "native_name": "कश्मीरी, كشميري‎"
+    "native_name": "कश्मीरी, كشميري‎",
+    "rtl": true
   },
   "ku": {
     "name": "Kurdish",
@@ -733,7 +741,8 @@
   },
   "pbu": {
     "name": "Northern Pashto",
-    "native_name": "Northern Pashto"
+    "native_name": "Northern Pashto",
+    "rtl": true
   },
   "pgz": {
     "name": "Papua New Guinean Sign Language",
@@ -753,15 +762,18 @@
   },
   "pnb": {
     "name": "Punjabi",
-    "native_name": "ਪੰਜਾਬੀ"
-  },
-  "ps": {
-    "name": "Pashto; Pushto",
-    "native_name": "پښتو"
+    "native_name": "ਪੰਜਾਬੀ",
+    "rtl": true
   },
   "prs": {
     "name": "Dari",
-    "native_name": "دری"
+    "native_name": "دری",
+    "rtl": true
+  },
+  "ps": {
+    "name": "Pashto; Pushto",
+    "native_name": "پښتو",
+    "rtl": true
   },
   "pt": {
     "name": "Portuguese",
@@ -825,7 +837,8 @@
   },
   "sd": {
     "name": "Sindhi",
-    "native_name": "सिन्धी, سنڌي، سندھی‎"
+    "native_name": "सिन्धी, سنڌي، سندھی‎",
+    "rtl": true
   },
   "se": {
     "name": "Northern Sami",
@@ -1017,7 +1030,8 @@
   },
   "ug": {
     "name": "Uighur; Uyghur",
-    "native_name": "Uyƣurqə, ئۇيغۇرچە‎"
+    "native_name": "Uyƣurqə, ئۇيغۇرچە‎",
+    "rtl": true
   },
   "uk": {
     "name": "Ukrainian",
@@ -1029,11 +1043,13 @@
   },
   "ur": {
     "name": "Urdu",
-    "native_name": "اردو"
+    "native_name": "اردو",
+    "rtl": true
   },
   "ur-PK": {
     "name": "Urdu",
-    "native_name": "Urdu"
+    "native_name": "Urdu",
+    "rtl": true
   },
   "uz": {
     "name": "Uzbek",
@@ -1089,7 +1105,8 @@
   },
   "yi": {
     "name": "Yiddish",
-    "native_name": "ייִדיש"
+    "native_name": "ייִדיש",
+    "rtl": true
   },
   "yo": {
     "name": "Yoruba",
