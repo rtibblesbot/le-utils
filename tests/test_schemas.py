@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 import contextlib
+import json
+import pkgutil
 import uuid
 
 import pytest
@@ -59,6 +61,14 @@ def _validate_completion_criteria(data):
     jsonschema.validate(
         instance=data, schema=completion_criteria.SCHEMA, resolver=resolver
     )
+
+
+def _load_language_codes():
+    """Return all language codes from languagelookup.json."""
+    data = pkgutil.get_data("le_utils", "resources/languagelookup.json")
+    codes = list(json.loads(data).keys())
+    assert len(codes) > 0, "languagelookup.json should not be empty"
+    return codes
 
 
 @contextlib.contextmanager
@@ -480,6 +490,31 @@ def test_embed__topics__missing_channel_id():
 
 
 @skip_if_jsonschema_unavailable
+def test_embed__topics__all_languagelookup_codes_valid():
+    """Every language code in languagelookup.json must be accepted by the topics schema.
+
+    Regression test for https://github.com/learningequality/le-utils/issues/209
+    where codes like zh-Hans-CN were rejected.
+    """
+    test_id = str(uuid.uuid4())
+    for code in _load_language_codes():
+        with _assert_not_raises(jsonschema.ValidationError):
+            _validate_embed_topics_request(
+                {
+                    "topics": [
+                        {
+                            "id": test_id,
+                            "channel_id": test_id,
+                            "title": "Test topic",
+                            "description": "Test description",
+                            "language": code,
+                        }
+                    ],
+                }
+            )
+
+
+@skip_if_jsonschema_unavailable
 def test_embed__content__valid():
     with _assert_not_raises(jsonschema.ValidationError):
         _validate_embed_content_request(
@@ -701,6 +736,34 @@ def test_embed__content__invalid_preset_files():
                 },
             }
         )
+
+
+@skip_if_jsonschema_unavailable
+def test_embed__content__all_languagelookup_codes_valid():
+    """Every language code in languagelookup.json must be accepted by the content schema.
+
+    Regression test for https://github.com/learningequality/le-utils/issues/209
+    where codes like zh-Hans-CN were rejected.
+    """
+    test_id = str(uuid.uuid4())
+    for code in _load_language_codes():
+        with _assert_not_raises(jsonschema.ValidationError):
+            _validate_embed_content_request(
+                {
+                    "resources": [
+                        {
+                            "id": test_id,
+                            "channel_id": test_id,
+                            "title": "Resource title",
+                            "description": "Resource description",
+                            "text": "Resource text",
+                            "language": code,
+                            "content_id": test_id,
+                            "channel_version": 1,
+                        },
+                    ],
+                }
+            )
 
 
 def _validate_learning_objectives(data):
