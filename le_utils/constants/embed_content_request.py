@@ -24,7 +24,7 @@ SCHEMA = {
         "language": {
             "type": "string",
             "description": "Language code from https://github.com/learningequality/le-utils/blob/main/le_utils/resources/languagelookup.json",
-            "pattern": "^[a-z]{2,3}(?:-[a-zA-Z]+)?$",
+            "pattern": "^[a-z]{2,3}(?:-[a-zA-Z]+)*$",
         },
         "url": {
             "type": "string",
