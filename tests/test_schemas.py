@@ -480,6 +480,45 @@ def test_embed__topics__missing_channel_id():
 
 
 @skip_if_jsonschema_unavailable
+def test_embed__topics__all_languagelookup_codes_valid():
+    """Every language code in languagelookup.json must be accepted by the schema.
+
+    Regression test for https://github.com/learningequality/le-utils/issues/209
+    where codes like zh-Hans-CN were rejected.
+    """
+    import json
+    import os
+
+    lookup_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "le_utils",
+        "resources",
+        "languagelookup.json",
+    )
+    with open(lookup_path) as f:
+        language_codes = list(json.load(f).keys())
+
+    assert len(language_codes) > 0, "languagelookup.json should not be empty"
+
+    for code in language_codes:
+        with _assert_not_raises(jsonschema.ValidationError):
+            _validate_embed_topics_request(
+                {
+                    "topics": [
+                        {
+                            "id": str(uuid.uuid4()),
+                            "channel_id": str(uuid.uuid4()),
+                            "title": "Test topic",
+                            "description": "Test description",
+                            "language": code,
+                        }
+                    ],
+                }
+            )
+
+
+@skip_if_jsonschema_unavailable
 def test_embed__content__valid():
     with _assert_not_raises(jsonschema.ValidationError):
         _validate_embed_content_request(
@@ -701,6 +740,48 @@ def test_embed__content__invalid_preset_files():
                 },
             }
         )
+
+
+@skip_if_jsonschema_unavailable
+def test_embed__content__all_languagelookup_codes_valid():
+    """Every language code in languagelookup.json must be accepted by the schema.
+
+    Regression test for https://github.com/learningequality/le-utils/issues/209
+    where codes like zh-Hans-CN were rejected.
+    """
+    import json
+    import os
+
+    lookup_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "le_utils",
+        "resources",
+        "languagelookup.json",
+    )
+    with open(lookup_path) as f:
+        language_codes = list(json.load(f).keys())
+
+    assert len(language_codes) > 0, "languagelookup.json should not be empty"
+
+    for code in language_codes:
+        with _assert_not_raises(jsonschema.ValidationError):
+            _validate_embed_content_request(
+                {
+                    "resources": [
+                        {
+                            "id": str(uuid.uuid4()),
+                            "channel_id": str(uuid.uuid4()),
+                            "title": "Resource title",
+                            "description": "Resource description",
+                            "text": "Resource text",
+                            "language": code,
+                            "content_id": str(uuid.uuid4()),
+                            "channel_version": 1,
+                        },
+                    ],
+                }
+            )
 
 
 def _validate_learning_objectives(data):
